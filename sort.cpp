@@ -44,6 +44,35 @@ void merge_sort(Iterator begin, Iterator end) {
 }
 
 template <typename Iterator>
+void quick_sort_linear(Iterator begin, Iterator end) {
+  using T = typename std::iterator_traits<Iterator>::value_type;
+  stack<pair<Iterator, Iterator>> st;
+  st.push({begin, end});
+  while (!st.empty()) {
+    auto begin = st.top().first;
+    auto end = st.top().second;
+    st.pop();
+    int N = distance(begin, end);
+    if (N <= 1) {
+      continue;
+    }
+    // srand(*begin);
+    int chosen = rand() % N;
+    auto pos = begin;
+    auto pivot = end - 1;
+    swap(*(begin + chosen), *pivot);
+    for (auto iter = begin; iter != pivot; iter++) {
+      if (*iter < *pivot) {
+        swap(*pos, *iter);
+        pos++;
+      }
+    }
+    swap(*pivot, *pos);
+    st.push({begin, pos});
+    st.push({pos + 1, end});
+  }
+}
+template <typename Iterator>
 void quick_sort(Iterator begin, Iterator end) {
   using T = typename std::iterator_traits<Iterator>::value_type;
   int N = distance(begin, end);
@@ -154,8 +183,8 @@ typename std::iterator_traits<Iterator>::value_type quick_select(Iterator begin,
 }
 int main() {
   srand(time(0));
-  vector<int> arr{3, 2, 4, 1, 5, 0};
-  heap_sort(arr.begin(), arr.end());
+  vector<int> arr{3, 2, 4, 1, 5, 0, 18, 12, 19, -4, 234, 42, 25, -3};
+  quick_sort_linear(arr.begin(), arr.end());
   cout << arr << '\n';
   // cout << quick_select(arr.begin(), arr.end(), 4) << '\n';
   return 0;
