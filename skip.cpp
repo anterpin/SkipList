@@ -26,7 +26,7 @@ class SkipList {
         node = node->next[i];
       }
     }
-    if (!node) {
+    if (!node || node->key != key) {
       return -1;
     } else {
       return node->value;
@@ -48,7 +48,7 @@ class SkipList {
       return;
     }
     int new_level = 0;
-    while (_size && new_level < N + 1 && rand() & 1) {  // coin choice
+    while (_size && new_level < N && rand() & 1) {  // coin choice
       new_level++;
     }
     _size++;
@@ -107,7 +107,8 @@ class SkipList {
 };
 int main() {
   // cout << time(0) << '\n';
-  srand(time(0));
+  //  srand(time(0));
+  srand(1652928953);
   SkipList<int, int> skip;
   skip.insert(7, 3);
   skip.insert(8, 1);
