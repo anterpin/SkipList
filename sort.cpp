@@ -150,6 +150,40 @@ void heap_sort(Iterator begin, Iterator end) {
   }
 }
 template <typename Iterator>
+typename std::iterator_traits<Iterator>::value_type
+quick_select_iterative(Iterator begin, Iterator end, int k) {
+  using T = typename std::iterator_traits<Iterator>::value_type;
+  while (true) {
+    int N = distance(begin, end);
+    assert(0 < N);
+    assert(k < N);
+    assert(0 <= k);
+    if (N == 1) {
+      return *begin;
+    }
+    int chosen = rand() % N;
+    auto pos = begin;
+    auto pivot = end - 1;
+    swap(*(begin + chosen), *pivot);
+    for (auto iter = begin; iter != end; iter++) {
+      if (*iter < *pivot) {
+        swap(*pos, *iter);
+        pos++;
+      }
+    }
+    swap(*pivot, *pos);
+    int i = distance(begin, pos);
+    if (i == k) {
+      return *pos;
+    } else if (i < k) {
+      begin = pos + 1;
+      k -= i + 1;
+    } else {
+      end = pos;
+    }
+  }
+}
+template <typename Iterator>
 typename std::iterator_traits<Iterator>::value_type quick_select(Iterator begin,
                                                                  Iterator end,
                                                                  int k) {
